@@ -15,6 +15,10 @@ char comandoBT(){
 char leitura; //Variável que armazena o comando do Bluetooth
 boolean modo; //Alterna entre controle remoto (FALSE) e automático (TRUE)
 
+//Itens de segurança do carro
+int luzRe = 9;
+
+
 //Sensores infra
 int lE = A1;
 int lD = A2;
@@ -67,6 +71,7 @@ void setup()
   pinMode(IN4, OUTPUT);
   pinMode(vME, OUTPUT);
   pinMode(vMD, OUTPUT);
+  pinMode(luzRe, OUTPUT);
   pinMode(LED_BUILTIN, OUTPUT);
   Serial.begin(9600);
 }
@@ -85,6 +90,7 @@ void darRe() //Função para andar em frente
   digitalWrite(IN2, LOW);
   digitalWrite(IN3, LOW);
   digitalWrite(IN4, HIGH);
+  digitalWrite(luzRe, HIGH);
 };
 
 void viraEsquerda()
@@ -109,6 +115,7 @@ void parar()
   digitalWrite(IN2, HIGH);
   digitalWrite(IN3, HIGH);
   digitalWrite(IN4, HIGH);
+  digitalWrite(luzRe, HIGH);
 }
 
 void loop()
@@ -132,6 +139,7 @@ void loop()
 
     if (leitura == 'f') {
       emFrente();
+      digitalWrite(luzRe, LOW);
     }
 
     if (leitura == 'r') {
@@ -140,10 +148,12 @@ void loop()
 
     if (leitura == 'd'){
       viraDireita();
+      digitalWrite(luzRe, LOW);
     }
 
     if (leitura == 'e'){
       viraEsquerda();
+      digitalWrite(luzRe, LOW);
     }
 
     if (leitura == 'p'){
@@ -171,6 +181,7 @@ void loop()
   while(modo == true){
 
     digitalWrite(LED_BUILTIN, HIGH);
+    digitalWrite(luzRe, LOW);
 
     microsec = ultrasom.timing();
     distancia = ultrasom.convert(microsec, Ultrasonic::CM);
